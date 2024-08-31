@@ -6,46 +6,60 @@
     <title>Financial AI Agent</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f7fa;
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #ffffff;
             color: #333;
-            text-align: center;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
         h2 {
-            margin-top: 50px;
-            color: #2c3e50;
-            font-size: 32px;
+            color: #1a1a1a;
+            font-size: 36px;
+            margin-bottom: 40px;
         }
         h4 {
-            color: #34495e;
+            color: #555;
             font-size: 20px;
             margin-bottom: 20px;
         }
         form {
             margin: 20px 0;
+            width: 100%;
+            max-width: 500px;
         }
         input[type="text"] {
-            padding: 10px;
-            width: 70%;
-            font-size: 18px;
-            border: 2px solid #bdc3c7;
-            border-radius: 5px;
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
             margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #4CAF50;
         }
         input[type="submit"] {
-            background-color: #3498db;
+            background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-size: 18px;
-            border: none;
-            border-radius: 5px;
+            border: 2px solid transparent;
+            border-radius: 25px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
+            outline: none;
+            width: 100%;
         }
         input[type="submit"]:hover {
-            background-color: #2980b9;
+            background-color: #45a049;
+            transform: scale(1.05);
         }
     </style>
 </head>
