@@ -45,6 +45,5 @@ def sentiment_analysis_reply():
     r = textblob.TextBlob(q).sentiment
     return(render_template("sentiment_analysis_reply.html",r=r))
 
-
 if __name__ == "__main__":
     app.run()
