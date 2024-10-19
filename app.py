@@ -1,5 +1,7 @@
 import google.generativeai as genai
 from flask import Flask,render_template,request
+import os
+import textblob
 
 api = "AIzaSyBCBD5Hj0toGJHEuJheSIQNim86amy5Jmw"
 genai.configure(api_key=api)
@@ -32,6 +34,17 @@ def joke():
 @app.route("/paynow", methods=["GET","POST"])
 def paynow():
     return(render_template("paynow.html"))
+
+@app.route("/sentiment_analysis", methods=["GET","POST"])
+def sentiment_analysis():
+    return(render_template("sentiment_analysis.html"))
+
+@app.route("/sentiment_analysis_reply", methods=["GET","POST"])
+def sentiment_analysis_reply():
+    q = request.form.get("q")
+    r = textblob.TextBlob(q).sentiment
+    return(render_template("sentiment_analysis_reply.html",r=r))
+
 
 if __name__ == "__main__":
     app.run()
