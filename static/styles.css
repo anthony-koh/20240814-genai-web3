@@ -1,106 +1,167 @@
-/* Global Styles */
+/* Root font and color variables for dark theme and customization */
 :root {
-    --primary-color: #007bff;
-    --secondary-color: #0056b3;
-    --text-color: #333;
-    --background-color: #f0f0f0;
-    --white-color: #ffffff;
+    --primary-color: #6d56d7; /* Purple accent color */
+    --primary-color-hover: #5c46b2;
+    --secondary-color: #ff4081; /* Secondary accent color for "Main" button */
+    --secondary-color-hover: #e73370;
+    --text-color: #e0e0e0; /* Light text for dark background */
+    --background-color: #1e1e1e; /* Dark background */
+    --container-background: #292929; /* Darker container */
+    --shadow-color: rgba(0, 0, 0, 0.3);
     --border-radius: 8px;
-    --font-family: 'Roboto', sans-serif;
-    --font-size-lg: 24px;
-    --font-size-md: 18px;
-    --font-size-sm: 16px;
-    --spacing: 20px;
-    --transition-duration: 0.3s;
+    --transition-speed: 0.3s;
 }
 
-/* Body and Layout */
 body {
-    font-family: var(--font-family);
+    font-family: 'Roboto', sans-serif;
     background-color: var(--background-color);
     margin: 0;
-    padding: var(--spacing);
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    color: var(--text-color);
+    line-height: 1.6;
 }
 
-/* Container */
+/* Container styling for dark theme */
 .container {
-    background-color: var(--white-color);
-    padding: calc(var(--spacing) + 10px);
+    background-color: var(--container-background);
+    padding: 40px;
     border-radius: var(--border-radius);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    box-shadow: 0 6px 16px var(--shadow-color);
+    max-width: 450px;
     width: 100%;
     text-align: center;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
-/* Image Styles */
-.image-class {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--border-radius);
-    margin-bottom: var(--spacing);
-    display: block;
+/* Add subtle hover effect to the container */
+.container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* Heading */
 h2 {
-    font-size: var(--font-size-lg);
-    margin-bottom: var(--spacing);
+    font-size: 28px;
+    margin-bottom: 25px;
     color: var(--text-color);
+    font-weight: 500;
 }
 
-/* Form */
+/* Form and input fields */
 form {
-    margin: calc(var(--spacing) / 2) 0;
+    margin: 15px 0;
 }
 
-/* Inputs and Buttons */
-input, button {
-    width: 100%;
-    padding: calc(var(--spacing) / 2);
-    margin-top: var(--spacing);
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-size: var(--font-size-md);
+/* Input field styling */
+input[type="text"] {
+    width: 100%; /* Make input field take full width */
+    padding: 14px;
+    margin: 10px 0; /* Margin for spacing */
+    background-color: #3a3a3a; /* Match input field background color */
+    border: 1px solid #444; /* Border for the input field */
+    color: var(--text-color); /* Text color */
+    border-radius: var(--border-radius); /* Match border radius */
+    box-sizing: border-box; /* Ensure the width includes padding and borders */
 }
 
-input[type="submit"], button {
+/* Standardize button width across all forms */
+form input[type="submit"] {
+    width: 100%; /* Ensure buttons take full width */
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: var(--border-radius);
+    font-size: 16px;
     background-color: var(--primary-color);
-    color: var(--white-color);
+    color: white;
     border: none;
     cursor: pointer;
-    transition: background-color var(--transition-duration) ease;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+/* Hover effect for submit button */
+form input[type="submit"]:hover {
+    background-color: var(--primary-color-hover);
+    transform: translateY(-2px);
+}
+
+/* Main button styling to differentiate it from the submit button */
+form input[type="submit"]:nth-of-type(2) {
+    background-color: var(--secondary-color); /* Pink color for "Main" button */
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+/* Hover effect for Main button */
+form input[type="submit"]:nth-of-type(2):hover {
+    background-color: var(--secondary-color-hover);
+    transform: translateY(-2px);
+}
+
+/* PayNow specific form layout */
+input[type="text"], input[type="number"] {
     width: 100%;
-    max-width: 300px;
+    padding: 14px;
+    margin: 10px 0;
+    background-color: #3a3a3a;
+    border: 1px solid #444;
+    color: var(--text-color);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
 }
 
-button:hover, input[type="submit"]:hover {
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: #3a3a3a;
+}
+
+/* PayNow buttons layout (side by side) */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.button-group .btn {
+    flex: 1;
+    padding: 14px;
+    margin-top: 10px;
     background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
 }
 
-/* Paragraph */
+/* Hover effect for buttons in button group */
+.button-group .btn:hover {
+    background-color: var(--secondary-color-hover);
+    transform: translateY(-2px);
+}
+
+/* Typography and spacing improvements for paragraphs */
 p {
-    margin-top: var(--spacing);
-    font-size: var(--font-size-md);
+    margin-top: 25px;
+    font-size: 18px;
     color: var(--primary-color);
+    font-weight: 500;
 }
 
-/* Media Queries */
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
     .container {
-        padding: var(--spacing);
+        padding: 30px;
     }
     h2 {
-        font-size: var(--font-size-md);
+        font-size: 22px;
     }
     input, button {
-        font-size: var(--font-size-sm);
+        font-size: 15px;
     }
     p {
-        font-size: var(--font-size-sm);
+        font-size: 16px;
     }
 }
