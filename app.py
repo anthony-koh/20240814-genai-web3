@@ -1,7 +1,8 @@
 import google.generativeai as genai
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,logging,jsonify
 import os
 import textblob
+import requests
 
 api = "AIzaSyBCBD5Hj0toGJHEuJheSIQNim86amy5Jmw"
 genai.configure(api_key=api)
@@ -44,6 +45,22 @@ def sentiment_analysis_reply():
     q = request.form.get("q")
     r = textblob.TextBlob(q).sentiment
     return(render_template("sentiment_analysis_reply.html",r=r))
+
+def fetch_financial_news():
+    api_key = "76cac055c5ec487cb5f01affdd1bd27f"
+    url = f"https://newsapi.org/v2/everything?q=finance&language=en&sortBy=publishedAt&apiKey={api_key}"
+    response = requests.get(url)
+    data = response.json()
+    if response.status_code == 200:
+        return data.get('articles', [])
+    else:
+        logging.error("Failed to fetch financial news")
+        return []
+    
+@app.route("/financial_news", methods=["GET", "POST"])
+def financial_news():
+    news_articles = fetch_financial_news()
+    return render_template('financial_news.html', news_articles=news_articles)
 
 if __name__ == "__main__":
     app.run()

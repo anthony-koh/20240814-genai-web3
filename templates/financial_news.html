@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial News</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; }
+        .news-container { max-width: 800px; margin: 0 auto; }
+        h1 { text-align: center; color: #333; }
+        .news-article { border-bottom: 1px solid #ccc; padding: 20px 0; display: flex; gap: 20px; }
+        .news-article img { width: 150px; height: 100px; object-fit: cover; border-radius: 5px; }
+        .news-content { flex: 1; }
+        .news-title { font-size: 1.2em; margin: 0 0 5px; color: #333; }
+        .news-title a { text-decoration: none; color: #1a0dab; }
+        .news-title a:hover { text-decoration: underline; }
+        .news-description { color: #555; margin-bottom: 10px; line-height: 1.4; }
+        .news-meta { font-size: 0.9em; color: #777; }
+        .error-message { text-align: center; color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="news-container">
+    <h1>Financial News</h1>
+    {% if news_articles %}
+        {% for article in news_articles %}
+            <div class="news-article">
+                <img src="{{ article.urlToImage or 'default-image.jpg' }}" alt="News Image">
+                <div class="news-content">
+                    <h2 class="news-title">
+                        <a href="{{ article.url }}" target="_blank">{{ article.title }}</a>
+                    </h2>
+                    <p class="news-description">{{ article.description or 'No description available.' }}</p>
+                    <p class="news-meta">
+                        By {{ article.author or 'Unknown Author' }} on {{ article.publishedAt[:10] }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="error-message">No news articles available at the moment.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
