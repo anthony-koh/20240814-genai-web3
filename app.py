@@ -3,6 +3,7 @@ from flask import Flask,render_template,request,logging,jsonify
 import os
 import textblob
 import requests
+import yfinance as yf
 
 api = "AIzaSyBCBD5Hj0toGJHEuJheSIQNim86amy5Jmw"
 genai.configure(api_key=api)
@@ -56,11 +57,33 @@ def fetch_financial_news():
     else:
         logging.error("Failed to fetch financial news")
         return []
-    
+
+MAGNIFICENT_7_SYMBOLS = ["AAPL", "MSFT", "NVDA", "TSLA", "GOOGL", "AMZN", "META"]
+
+def get_stock_data(symbols):
+    stock_data = {}
+    for symbol in symbols:
+        stock = yf.Ticker(symbol)
+        data = stock.history(period="1d")  # Get today's data
+        if not data.empty:
+            last_quote = data.iloc[-1]
+            stock_data[symbol] = {
+                "price": round(last_quote["Close"], 2),
+                "change": round(last_quote["Close"] - last_quote["Open"], 2),
+                "percent_change": round((last_quote["Close"] - last_quote["Open"]) / last_quote["Open"] * 100, 2)
+            }
+    return stock_data
+
 @app.route("/financial_news", methods=["GET", "POST"])
 def financial_news():
     news_articles = fetch_financial_news()
-    return render_template('financial_news.html', news_articles=news_articles)
+    stock_data = get_stock_data(MAGNIFICENT_7_SYMBOLS)
+    return render_template('financial_news.html', stock_data = stock_data, news_articles=news_articles)
+
+@app.route("/get_stock_data", methods=["GET"])
+def get_stock_data_route():
+    stock_data = get_stock_data(MAGNIFICENT_7_SYMBOLS)
+    return jsonify(stock_data)
 
 if __name__ == "__main__":
     app.run()

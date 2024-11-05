@@ -3,45 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial News</title>
+    <title>Financial News and Stock Monitor</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; }
-        .news-container { max-width: 800px; margin: 0 auto; }
-        h1 { text-align: center; color: #333; }
-        .news-article { border-bottom: 1px solid #ccc; padding: 20px 0; display: flex; gap: 20px; }
-        .news-article img { width: 150px; height: 100px; object-fit: cover; border-radius: 5px; }
-        .news-content { flex: 1; }
-        .news-title { font-size: 1.2em; margin: 0 0 5px; color: #333; }
-        .news-title a { text-decoration: none; color: #1a0dab; }
-        .news-title a:hover { text-decoration: underline; }
-        .news-description { color: #555; margin-bottom: 10px; line-height: 1.4; }
-        .news-meta { font-size: 0.9em; color: #777; }
-        .error-message { text-align: center; color: red; font-weight: bold; }
+        /* General styles */
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        h1, h2 { 
+            color: #333; 
+            text-align: center; 
+        }
+
+        /* Stock Monitor styles */
+        .stock-monitor-container {
+            max-width: 800px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1a202c;
+            padding: 20px;
+            border-radius: 10px;
+            margin: auto;
+            margin-bottom: 30px;
+            color: #fff;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .stock-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #2d3748;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 100px;
+        }
+        .stock-symbol {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .stock-price {
+            font-size: 1.2em;
+            margin: 5px 0;
+        }
+        .stock-change {
+            font-size: 0.9em;
+            padding: 5px 8px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .positive { 
+            color: #48bb78; 
+            background-color: rgba(72, 187, 120, 0.2); 
+        }
+        .negative { 
+            color: #f56565; 
+            background-color: rgba(245, 101, 101, 0.2); 
+        }
+
+        /* Financial News styles */
+        .news-container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background-color: #fff; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        }
+        .news-article { 
+            border-bottom: 1px solid #ccc; 
+            padding: 20px 0; 
+            display: flex; 
+            gap: 20px; 
+        }
+        .news-article img { 
+            width: 150px; 
+            height: 100px; 
+            object-fit: cover; 
+            border-radius: 5px; 
+        }
+        .news-content { 
+            flex: 1; 
+        }
+        .news-title { 
+            font-size: 1.2em; 
+            margin: 0 0 5px; 
+            color: #333; 
+        }
+        .news-title a { 
+            text-decoration: none; 
+            color: #1a0dab; 
+        }
+        .news-title a:hover { 
+            text-decoration: underline; 
+        }
+        .news-description { 
+            color: #555; 
+            margin-bottom: 10px; 
+            line-height: 1.4; 
+        }
+        .news-meta { 
+            font-size: 0.9em; 
+            color: #777; 
+        }
+        .error-message { 
+            text-align: center; 
+            color: red; 
+            font-weight: bold; 
+        }
+        /* Pagination styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .pagination a.active {
+            background-color: #007bff;
+            color: #fff;
+        }
     </style>
+    <script>
+        // Fetch stock data every 10 seconds and update the stock monitor
+        async function fetchStockData() {
+            try {
+                const response = await fetch('/get_stock_data');
+                const stockData = await response.json();
+
+                const stockContainer = document.querySelector('.stock-monitor-container');
+                stockContainer.innerHTML = ''; // Clear current stocks
+
+                for (const [symbol, details] of Object.entries(stockData)) {
+                    const stockItem = document.createElement('div');
+                    stockItem.classList.add('stock-item');
+
+                    const symbolElement = document.createElement('div');
+                    symbolElement.classList.add('stock-symbol');
+                    symbolElement.textContent = symbol;
+
+                    const priceElement = document.createElement('div');
+                    priceElement.classList.add('stock-price');
+                    priceElement.textContent = `$${details.price}`;
+
+                    const changeElement = document.createElement('div');
+                    changeElement.classList.add('stock-change');
+                    const arrow = details.change >= 0 ? '▲' : '▼';
+                    changeElement.textContent = `${arrow} ${details.change} (${details.percent_change}%)`;
+                    changeElement.classList.add(details.change >= 0 ? 'positive' : 'negative');
+
+                    stockItem.appendChild(symbolElement);
+                    stockItem.appendChild(priceElement);
+                    stockItem.appendChild(changeElement);
+
+                    stockContainer.appendChild(stockItem);
+                }
+            } catch (error) {
+                console.error("Error fetching stock data:", error);
+            }
+        }
+
+        // Refresh stock data every 10 seconds
+        setInterval(fetchStockData, 10000);
+        // Initial fetch when the page loads
+        window.onload = fetchStockData;
+    </script>
 </head>
 <body>
 
-<div class="news-container">
-    <h1>Financial News</h1>
-    {% if news_articles %}
-        {% for article in news_articles %}
-            <div class="news-article">
-                <img src="{{ article.urlToImage or 'default-image.jpg' }}" alt="News Image">
-                <div class="news-content">
-                    <h2 class="news-title">
-                        <a href="{{ article.url }}" target="_blank">{{ article.title }}</a>
-                    </h2>
-                    <p class="news-description">{{ article.description or 'No description available.' }}</p>
-                    <p class="news-meta">
-                        By {{ article.author or 'Unknown Author' }} on {{ article.publishedAt[:10] }}
-                    </p>
+    <!-- Stock Monitor -->
+    <div class="stock-monitor-container">
+        <!-- Initial stock data rendered by server, will be updated by JavaScript -->
+        {% for symbol, details in stock_data.items() %}
+            <div class="stock-item">
+                <div class="stock-symbol">{{ symbol }}</div>
+                <div class="stock-price">${{ details.price }}</div>
+                <div class="stock-change {% if details.change >= 0 %}positive{% else %}negative{% endif %}">
+                    {% if details.change >= 0 %}▲{% else %}▼{% endif %} {{ details.change }} ({{ details.percent_change }}%)
                 </div>
             </div>
         {% endfor %}
-    {% else %}
-        <p class="error-message">No news articles available at the moment.</p>
-    {% endif %}
-</div>
+    </div>
+
+    <!-- Financial News Section -->
+    <div class="news-container">
+        <h2>Financial News</h2>
+        {% if news_articles %}
+            {% for article in news_articles %}
+                <div class="news-article">
+                    <img src="{{ article.urlToImage or 'default-image.jpg' }}" alt="News Image">
+                    <div class="news-content">
+                        <h2 class="news-title">
+                            <a href="{{ article.url }}" target="_blank">{{ article.title }}</a>
+                        </h2>
+                        <p class="news-description">{{ article.description or 'No description available.' }}</p>
+                        <p class="news-meta">
+                            By {{ article.author or 'Unknown Author' }} on {{ article.publishedAt[:10] }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="error-message">No news articles available at the moment.</p>
+        {% endif %}
+    </div>
 
 </body>
 </html>
